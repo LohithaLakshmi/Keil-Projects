@@ -1,0 +1,5 @@
+".\Objects\STARTUP.obj",
+".\Objects\Main.obj",
+".\Objects\Blink.obj" 
+TO ".\Objects\EX_Int" 
+PRINT(".\Listings\EX_Int.m51") CODE( 0X0000-0X0FFF )

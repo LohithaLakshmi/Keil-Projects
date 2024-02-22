@@ -1,0 +1,1 @@
+"Blink.c" ROM(SMALL) OPTIMIZE (8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\Blink.lst) TABS (2) OBJECT(.\Objects\Blink.obj)

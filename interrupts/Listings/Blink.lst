@@ -1,0 +1,13 @@
+C51 COMPILER V9.60.0.0   BLINK                                                             11/28/2019 10:13:02 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE BLINK
+OBJECT MODULE PLACED IN .\Objects\Blink.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Blink.c ROM(SMALL) OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\L
+                    -istings\Blink.lst) TABS(2) OBJECT(.\Objects\Blink.obj)
+
+line level    source
+
+*** ERROR C318 OF Blink.c: can't open file 'Blink.c'
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  1 ERROR(S)

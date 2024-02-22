@@ -1,0 +1,4 @@
+".\Objects\STARTUP.obj",
+".\Objects\led2.obj" 
+TO ".\Objects\led2" 
+PRINT(".\Listings\led2.m51") CODE( 0X0000-0X0FFF )

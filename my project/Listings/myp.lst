@@ -1,0 +1,213 @@
+C51 COMPILER V9.60.0.0   MYP                                                               06/17/2019 17:45:12 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MYP
+OBJECT MODULE PLACED IN .\Objects\myp.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE myp.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\myp.l
+                    -st) TABS(2) OBJECT(.\Objects\myp.obj)
+
+line level    source
+
+   1          #include<reg51.h>
+   2          #define LCD = P1; //LCD display
+   3          #define ADC = P2; //temperature sensor
+   4          sbit rs = P3^2;  //RS pin 
+   5          sbit rw = P3^3;  // RW pin 
+   6          sbit e =  P3^4;  //E pin 
+   7          sbit pwm = P3^0;//PWM
+   8          //temp
+   9          sbit ADC_DATA = P1;
+  10          sbit read = P3^5;
+  11          sbit write= P3^6;
+  12          sbit intr = P3^7;
+  13          sbit cs = P3^1;
+  14          unsigned char value;
+  15          
+  16          //temp
+  17          void conv()
+  18          {
+  19   1      
+  20   1      cs = 0;
+  21   1      write = 0;
+  22   1      write = 1;
+  23   1      cs = 1;
+  24   1      while(intr);
+  25   1      }
+  26          
+  27          void send()
+  28          {
+  29   1      cs=0;
+  30   1      read = 1;
+  31   1      read = 0;
+  32   1      value = ADC_DATA;
+  33   1      cs = 1;
+  34   1      }
+  35          //temp
+  36          
+  37          
+  38          //LCD
+  39          void delay(unsigned int time)  
+  40          {
+  41   1          unsigned i,j ;
+  42   1          for(i=0;i<time;i++)    
+  43   1          for(j=0;j<1275;j++);
+  44   1      }
+  45          void lcd_cmd(unsigned char command)  
+  46          {
+  47   1          display_port = command;
+*** ERROR C202 IN LINE 47 OF myp.c: 'display_port': undefined identifier
+  48   1          rs= 0;
+  49   1          rw=0;
+  50   1          e=1;
+  51   1          delay(1);
+  52   1          e=0;
+  53   1      }
+C51 COMPILER V9.60.0.0   MYP                                                               06/17/2019 17:45:12 PAGE 2   
+
+  54          
+  55          void lcd_data(unsigned char disp_data) 
+  56          {
+  57   1          display_port = disp_data;
+*** ERROR C202 IN LINE 57 OF myp.c: 'display_port': undefined identifier
+  58   1          rs= 1;
+  59   1          rw=0;
+  60   1          e=1;
+  61   1          delay(1);
+  62   1          e=0;
+  63   1      }
+  64          
+  65           void lcd_init()    
+  66          {
+  67   1          lcd_cmd(0x38);  // for using 2 lines and 5X7 matrix of LCD
+  68   1          msdelay(10);
+  69   1          lcd_cmd(0x0F);  //  display ON, cursor blinking
+  70   1          delay(10);
+  71   1          lcd_cmd(0x01);  //clear screen
+  72   1          delay(10);
+  73   1          lcd_cmd(0x81);  // bring cursor to position 1 of line 1
+  74   1          delay(10);
+  75   1      }
+  76          
+  77          //LCD
+  78          
+  79          //pwm
+  80          void pwm_default()
+  81          {
+  82   1      pwm = 0;
+  83   1      TH0 = 0xFF;
+  84   1      TL0 = 0x47;
+  85   1      TR0 = 1;
+  86   1      while(!TF0)
+  87   1      {
+  88   2      TF0=0;
+  89   2      TR0 = 0; 
+  90   2      
+  91   2      }
+  92   1      
+  93   1      }
+  94          
+  95          //pwm
+  96          
+  97          
+  98          
+  99          
+ 100          
+ 101          
+ 102          
+ 103          void main()
+ 104          { 
+ 105   1      
+ 106   1      read = 1;
+ 107   1      write = 1;
+ 108   1      intr = 0;
+ 109   1      
+ 110   1      while(1)
+ 111   1      {
+ 112   2      {
+ 113   3      conv();
+ 114   3      send();
+C51 COMPILER V9.60.0.0   MYP                                                               06/17/2019 17:45:12 PAGE 3   
+
+ 115   3      SBUF = ADC_DATA;
+ 116   3      }
+ 117   2      
+ 118   2          unsigned char a[15]= "TEMP:", ADC_DATA;  
+ 119   2        
+ 120   2          int l=0;
+ 121   2      
+ 122   2          lcd_init();
+ 123   2      
+ 124   2          while(a[l] != '\0') // searching the null terminator in the sentence
+ 125   2          
+ 126   2          {
+ 127   3              lcd_data(a[l]);
+ 128   3              l++;
+ 129   3              msdelay(50);
+ 130   3          }
+ 131   2      
+ 132   2      
+ 133   2      
+ 134   2      
+ 135   2      //PWM
+ 136   2      
+ 137   2      if(temp<20)
+ 138   2      {
+ 139   3      pwm = 1;
+ 140   3      TH0 = 0xDC;
+ 141   3      TL0 = 0x00;
+ 142   3      
+ 143   3      }
+ 144   2      else if(20<temp<25)
+ 145   2      {
+ 146   3      pwm = 1;
+ 147   3      TH0 = 0xCA;
+ 148   3      TL0 = 0x00;
+ 149   3      void pwm_default();
+ 150   3      
+ 151   3      }
+ 152   2      else if(25<temp<30)
+ 153   2      {
+ 154   3      pwm = 1;
+ 155   3      TH0 = 0xB8;
+ 156   3      TL0 = 0x00;
+ 157   3      void pwm_default();
+ 158   3      }
+ 159   2      
+ 160   2      else if(30<temp<35)
+ 161   2      {
+ 162   3      pwm = 1;
+ 163   3      TH0 = 0xA6;
+ 164   3      TL0 = 0x00;
+ 165   3      void pwm_default();
+ 166   3      }
+ 167   2      
+ 168   2      else if(35<temp<40)
+ 169   2      {
+ 170   3      pwm = 1;
+ 171   3      TH0 = 0x94;
+ 172   3      TL0 = 0x00;
+ 173   3      void pwm_default();
+ 174   3      }
+ 175   2      else if(temp>40)
+ 176   2      {
+C51 COMPILER V9.60.0.0   MYP                                                               06/17/2019 17:45:12 PAGE 4   
+
+ 177   3      pwm = 1;
+ 178   3      TH0 = 0x82;
+ 179   3      TL0 = 0x00;
+ 180   3      void pwm_default();
+ 181   3      }
+ 182   2      
+ 183   2      
+ 184   2      
+ 185   2      }
+ 186   1      
+ 187   1      
+ 188   1      
+ 189   1      
+ 190   1      
+ 191   1      
+ 192   1      
+ 193   1      }
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  2 ERROR(S)

@@ -1,2 +1,2 @@
 # Keil-Projects
-All the projects done for my intership at Tech Mahindra
+All the projects done for my internship
